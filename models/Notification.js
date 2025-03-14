@@ -1,14 +1,31 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
-const User = require("./User");
+'use strict';
+import { Model } from 'sequelize';
 
-const Notification = sequelize.define("Notification", {
-    id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
-    userId: { type: DataTypes.UUID, allowNull: false },
-    message: { type: DataTypes.STRING, allowNull: false },
-    isRead: { type: DataTypes.BOOLEAN, defaultValue: false },
-});
+const Notification = (sequelize, DataTypes) => {
+  class Notification extends Model {
+    static associate(models) {
+      Notification.belongsTo(models.User, { foreignKey: 'userId' });
+    }
+  }
 
-Notification.belongsTo(User, { foreignKey: "userId", as: "user" });
+  Notification.init(
+    {
+      type: {
+        type: DataTypes.ENUM('TaskAssigned', 'TaskCompleted', 'CommentAdded'),
+        allowNull: false,
+      },
+      message: { type: DataTypes.STRING, allowNull: false },
+      UserId : {type : DataTypes.UUID , allowNull : false , references : { model : User , key: 'id'}},
+      isRead: { type: DataTypes.BOOLEAN, defaultValue: false },
+    },
+    {
+      sequelize,
+      modelName: 'Notification',
+      paranoid: true,
+    }
+  );
 
-module.exports = Notification;
+  return Notification;
+};
+
+export default Notification;

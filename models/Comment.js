@@ -1,16 +1,29 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
-const Task = require("./Task");
-const User = require("./User");
+'use strict';
+import { Model } from 'sequelize';
 
-const Comment = sequelize.define("Comment", {
-    id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
-    content: { type: DataTypes.TEXT, allowNull: false },
-    taskId: { type: DataTypes.UUID, allowNull: false },
-    userId: { type: DataTypes.UUID, allowNull: false }
-});
+const Comment = (sequelize, DataTypes) => {
+  class Comment extends Model {
+    static associate(models) {
+      Comment.belongsTo(models.User, { foreignKey: 'userId' });
+      Comment.belongsTo(models.Task, { foreignKey: 'taskId' });
+    }
+  }
 
-Comment.belongsTo(Task, { foreignKey: "taskId", as: "task" });
-Comment.belongsTo(User, { foreignKey: "userId", as: "user" });
+  Comment.init(
+    {
+      content: { type: DataTypes.TEXT, allowNull: false },
+      commentForType: {type : DataTypes.STRING , allowNull : false},
+      taskId: { type: DataTypes.UUID, allowNull: false ,references :{ model:Task , key:'id'}},
+      userId: { type: DataTypes.UUID, allowNull: false ,references :{ model:User , key:'id'}},
+    },
+    {
+      sequelize,
+      modelName: 'Comment',
+      paranoid: true,
+    }
+  );
 
-module.exports = Comment;
+  return Comment;
+};
+
+export default Comment;
