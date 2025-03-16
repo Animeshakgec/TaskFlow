@@ -1,7 +1,7 @@
 const cron = require("node-cron");
-const Task = require("../../models/Task");
-const User = require("../../models/User");
-const sendEmail = require("../../config/email");
+const Task = require("../models/Task");
+const User = require("../models/User");
+const sendEmail = require("../config/email");
 
 // Run every day at 8 AM
 cron.schedule("0 8 * * *", async () => {

@@ -1,9 +1,35 @@
-const { Sequelize } = require("sequelize");
-require("dotenv").config();
+import { config } from 'dotenv';
+config();
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-    dialect: "postgres",
-    logging: false
-});
-
-module.exports = sequelize;
+export default {
+  development: {
+      username: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
+      host: process.env.DB_HOST,
+      dialect: 'postgres',
+      port: process.env.DB_PORT || 3306,
+  },
+  test: {
+      username: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME_TEST,
+      host: process.env.DB_HOST,
+      dialect: 'postgres',
+      port: process.env.DB_PORT || 3306,
+  },
+  production: {
+      username: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
+      host: process.env.DB_HOST,
+      dialect: 'postgres',
+      port: process.env.DB_PORT || 3306,
+  },
+  seeders: {
+      'seeders-path': './seeders',
+      test: {
+          'seeders-path': './seeders/test',
+      },
+  },
+};
