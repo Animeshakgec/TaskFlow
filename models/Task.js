@@ -62,9 +62,11 @@ const Task = (sequelize, DataTypes) => {
 
       Task.belongsTo(models.Sprint, { foreignKey: 'sprintId', allowNull: true ,constraints: false,});
 
-      Task.hasMany(models.Comment , { foreignKey : 'commentForType' , constraints : false , scope : {
+      Task.hasMany(models.Comment , { foreignKey : 'taskId' , constraints : false , scope : {
         commentForType : 'Task'
       }})
+      
+      Task.hasMany(models.FileAttachment , { foreignKey : 'taskId' , constraints : false , scope : {  attachmentForType : 'Task'}})
     }
   }
 

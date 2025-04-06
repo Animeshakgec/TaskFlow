@@ -5,8 +5,6 @@ import bcrypt from 'bcrypt';
 const User = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      User.belongsTo(models.Organisation);
-      models.Organisation.hasMany(User);
       User.hasMany(models.Task);
       User.hasMany(models.Comment);
       User.hasMany(models.Notification);

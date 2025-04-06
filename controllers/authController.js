@@ -63,7 +63,7 @@ exports.login = async (req, res) => {
       // Set refresh token as HTTP-only cookie
       res.cookie('jwt', refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+        secure: process.env.NODE_ENV === 'production',
         sameSite: 'Strict',
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });

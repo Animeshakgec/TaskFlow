@@ -4,11 +4,7 @@ import { Model } from 'sequelize';
 const Team = (sequelize, DataTypes) => {
   class Team extends Model {
     static associate(models) {
-
-        //organisation
-        models.Organisation.hasMany(Team,{ foreignKey : 'organisationId'})
-        Team.belongsTo(models.Organisation, {foreignKey : 'organisationId'});
-
+      
         //project association   
         Team.belongsTo(models.Project, { foreignKey: 'projectId' });
         models.Project.hasMany(Team, { foreignKey: 'projectId' });

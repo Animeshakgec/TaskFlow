@@ -15,7 +15,9 @@ const FileAttachment = (sequelize, DataTypes) => {
     {
       fileName: { type: DataTypes.STRING, allowNull: false },
       fileUrl: { type: DataTypes.STRING, allowNull: false },
-      fileType: { type: DataTypes.STRING, allowNull: false },
+      attachmentForType: { type: DataTypes.STRING, allowNull: false },
+      taskId: { type: DataTypes.UUID, allowNull: false },
+      userId: { type: DataTypes.UUID, allowNull: false },
       size: { type: DataTypes.INTEGER, allowNull: false },
     },
     {
