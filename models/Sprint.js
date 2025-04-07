@@ -4,8 +4,8 @@ import { Model } from 'sequelize';
 const Sprint = (sequelize, DataTypes) => {
   class Sprint extends Model {
     static associate(models) {
-      Sprint.belongsTo(models.Project, { foreignKey: 'projectId' , constraints:false , scope : { sprintType : 'Task'}});
-      models.Project.hasMany(Sprint, { foreignKey: 'projectId' , constraints:false , scope : { sprintType : 'Task'}});
+      Sprint.belongsTo(models.Project, { foreignKey: 'projectId' , constraints:false , scope : { sprintType : 'project'}});
+      models.Project.hasMany(Sprint, { foreignKey: 'projectId' , constraints:false , scope : { sprintType : 'project'}});
 
       Sprint.hasMany(models.Task, { foreignKey: 'sprintId' , constraints:false , scope : { sprintType : 'Task'}});
 
@@ -14,10 +14,7 @@ const Sprint = (sequelize, DataTypes) => {
         scope: {
           tagForType: 'Sprint'
         }});
-
-        Sprint.hasMany(models.Comment , { foreignKey : 'commentForType' , constraints : false , scope : {
-          commentForType : 'Task'
-        }});
+      models.Tag.belongsTo(Sprint, { foreignKey: 'tagForId', constraints: false, scope: { tagForType: 'Sprint' } });
     }
   }
 

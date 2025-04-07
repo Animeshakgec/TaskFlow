@@ -1,53 +1,82 @@
-const { Project } = require("../models");
+const { Project, sequelize } = require("../models");
+const ProjectService = require("../services/projectService.js");
 
 exports.createProject = async (req, res) => {
+    const transaction = await sequelize.transaction();
     try {
-        const { name, description } = req.body;
-        const newProject = await Project.create({ 
-            name, 
-            description, 
-            ownerId: req.user.id 
-        });
-        res.status(201).json(newProject);
+        const { name, description, TeamId } = req.body;
+        const service = new ProjectService();
+
+        const result = await service.createProject(name, description, TeamId, req.user.organisationId, transaction);
+
+        if (!result.status) {
+            await transaction.rollback();
+            return res.status(400).json({ error: result.message });
+        }
+
+        await transaction.commit();
+        res.status(201).json(result.data);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        await transaction.rollback();
+        res.status(500).json({ error: error.message });
     }
 };
 
 exports.getProjects = async (req, res) => {
     try {
-        const projects = await Project.findAll({ where: { ownerId: req.user.id } });
-        res.json(projects);
+        const service = new ProjectService();
+        const result = await service.getProjects(req.body.TeamId);
+
+        if (!result.status) {
+            return res.status(400).json({ error: result.message });
+        }
+
+        res.json(result.data);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
 exports.updateProject = async (req, res) => {
+    const transaction = await sequelize.transaction();
     try {
-        const { name, description } = req.body;
-        const project = await Project.findByPk(req.params.id);
-        if (!project || project.ownerId !== req.user.id) {
-            return res.status(403).json({ message: "Unauthorized" });
+        const { name, description, TeamId } = req.body;
+        const { id } = req.params;
+        const service = new ProjectService();
+
+        const result = await service.updateProject(id, name, description, TeamId, transaction);
+
+        if (!result.status) {
+            await transaction.rollback();
+            return res.status(403).json({ error: result.message });
         }
-        project.name = name;
-        project.description = description;
-        await project.save();
-        res.json(project);
+
+        await transaction.commit();
+        res.json(result.data);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        await transaction.rollback();
+        res.status(500).json({ error: error.message });
     }
 };
 
 exports.deleteProject = async (req, res) => {
+    const transaction = await sequelize.transaction();
     try {
-        const project = await Project.findByPk(req.params.id);
-        if (!project || project.ownerId !== req.user.id) {
-            return res.status(403).json({ message: "Unauthorized" });
+        const { TeamId } = req.body;
+        const { id } = req.params;
+        const service = new ProjectService();
+
+        const result = await service.deleteProject(id, TeamId, transaction);
+
+        if (!result.status) {
+            await transaction.rollback();
+            return res.status(403).json({ error: result.message });
         }
-        await project.destroy();
-        res.json({ message: "Project deleted successfully" });
+
+        await transaction.commit();
+        res.json({ message: result.message });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        await transaction.rollback();
+        res.status(500).json({ error: error.message });
     }
 };

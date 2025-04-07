@@ -54,11 +54,12 @@ const Task = (sequelize, DataTypes) => {
       // Task.belongsTo(models.Team, { foreignKey: 'teamId', allowNull: true ,constraints: false,});
       Task.belongsTo(models.User, { foreignKey: 'assignedTo', allowNull: true ,constraints: false,});
 
-      Task.belongsToMany(models.Tag, {foreignKey: 'tagForId',
+      Task.hasMany(models.Tag, {foreignKey: 'tagForId',
         constraints: false,
         scope: {
           tagForType: 'Task'
         }});
+        models.Tag.belongsTo(Task, { foreignKey: 'tagForId', constraints: false, scope: { tagForType: 'Task' } });
 
       Task.belongsTo(models.Sprint, { foreignKey: 'sprintId', allowNull: true ,constraints: false,});
 
@@ -82,7 +83,7 @@ const Task = (sequelize, DataTypes) => {
         allowNull: false, defaultValue: 0 },
       assignedType:{type :DataTypes.STRING , allowNull : false },
       assignedTo: { type: DataTypes.UUID, allowNull: false },
-      sprintId: { type: DataTypes.UUID, allowNull: true, references:{model: Sprint , key:'id'}},
+      sprintId: { type: DataTypes.UUID, allowNull: true, references:{model: Model.Sprint , key:'id'}},
     },
     {
       sequelize,

@@ -15,7 +15,7 @@ const Notification = (sequelize, DataTypes) => {
         allowNull: false,
       },
       message: { type: DataTypes.STRING, allowNull: false },
-      UserId : {type : DataTypes.UUID , allowNull : false , references : { model : User , key: 'id'}},
+      UserId : {type : DataTypes.UUID , allowNull : false , references : { model : Model.User , key: 'id'}},
       isRead: { type: DataTypes.BOOLEAN, defaultValue: false },
     },
     {

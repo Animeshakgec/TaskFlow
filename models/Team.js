@@ -22,7 +22,7 @@ const Team = (sequelize, DataTypes) => {
     {
       name: { type: DataTypes.STRING, allowNull: false },
       projectId: { type: DataTypes.UUID, allowNull: false },
-      organisationId: { type:DataTypes.UUID , references : { model: Organisation, key: 'id'} , allowNull:false }
+      organisationId: { type:DataTypes.UUID , references : { model: Model.Organisation, key: 'id'} , allowNull:false }
     },
     {
       sequelize,

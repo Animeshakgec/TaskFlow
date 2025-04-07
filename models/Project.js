@@ -5,8 +5,8 @@ const Project = (sequelize, DataTypes) => {
   class Project extends Model {
     static associate(models) {
 
-      // Project.belongsTo(models.Team, { foreignKey: 'TeamId' });
-      // models.Team.hasMany(Project, { foreignKey: 'TeamId' });
+      Project.belongsTo(models.Team, { foreignKey: 'TeamId' });
+      models.Team.hasMany(Project, { foreignKey: 'TeamId' });
 
       Project.hasMany(models.Task, { foreignKey: 'projectId' });
 
@@ -15,13 +15,18 @@ const Project = (sequelize, DataTypes) => {
         scope: {
           tagForType: 'Project'
         }});
+      models.Tag.belongsTo(Project, { foreignKey: 'tagForId', constraints: false, scope: { tagForType: 'Project' } });
     }
   }
 
   Project.init(
     {
       name: { type: DataTypes.STRING, allowNull: false },
-      description: { type: DataTypes.TEXT },
+      description: { type: DataTypes.TEXT ,allowNull : true},
+      teamId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
       organizationId: { type: DataTypes.UUID, allowNull: false },
     },
     {

@@ -13,8 +13,8 @@ const Comment = (sequelize, DataTypes) => {
     {
       content: { type: DataTypes.TEXT, allowNull: false },
       commentForType: {type : DataTypes.STRING , allowNull : false},
-      taskId: { type: DataTypes.UUID, allowNull: false ,references :{ model:Task , key:'id'}},
-      userId: { type: DataTypes.UUID, allowNull: false ,references :{ model:User , key:'id'}},
+      taskId: { type: DataTypes.UUID, allowNull: false ,references :{ model:Model.Task , key:'id'}},
+      userId: { type: DataTypes.UUID, allowNull: false ,references :{ model:Model.User , key:'id'}},
     },
     {
       sequelize,

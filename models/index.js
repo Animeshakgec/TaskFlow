@@ -76,30 +76,33 @@
 // export default db;
 
 import { Sequelize } from 'sequelize';
-import config from './config/database.js';
+import dbConfig from '../config/database.js';
 
-import Organisation from './models/Organisation.js';
-import User from './models/User.js';
-import Project from './models/Project.js';
-import Team from './models/Team.js';
-import Task from './models/Task.js';
-import Comment from './models/Comment.js';
-import FileAttachment from './models/FileAttachment.js';
-import Notification from './models/Notification.js';
-import AuditLog from './models/AuditLog.js';
-import Sprint from './models/Sprint.js';
+import Organisation from './Organisation.js';
+import User from './User.js';
+import Project from './Project.js';
+import Team from './Team.js';
+import Task from './Task.js';
+import Comment from './Comment.js';
+import FileAttachment from './FileAttachment.js';
+import Notification from './Notification.js';
+import AuditLog from './AuditLog.js';
+import Sprint from './Sprint.js';
+import Tag from './Tag.js';
+import TeamMembers from './TeamMembers.js';
 
 const env = process.env.NODE_ENV || 'development';
+const config = dbConfig[env];
 
 const sequelize = new Sequelize(
-  config[env].database,
-  config[env].username,
-  config[env].password,
+  config.database,
+  config.username,
+  config.password,
   {
-    host: config[env].host,
-    dialect: config[env].dialect,
-    port: config[env].port,
-    logging: false, // Disable logging for cleaner output
+    host: config.host,
+    dialect: config.dialect,
+    port: config.port,
+    logging: false,
   }
 );
 
@@ -116,6 +119,8 @@ db.FileAttachment = FileAttachment(sequelize, Sequelize.DataTypes);
 db.Notification = Notification(sequelize, Sequelize.DataTypes);
 db.AuditLog = AuditLog(sequelize, Sequelize.DataTypes);
 db.Sprint = Sprint(sequelize, Sequelize.DataTypes);
+db.Tag = Tag(sequelize, Sequelize.DataTypes);
+db.TeamMembers = TeamMembers(sequelize, Sequelize.DataTypes);
 
 // Define associations
 Object.keys(db).forEach((modelName) => {

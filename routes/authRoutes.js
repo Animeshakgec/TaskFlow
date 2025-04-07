@@ -10,11 +10,11 @@ const { register, login } = require("../controllers/authController");
 // router.delete('/user/:id', authController.deleteUser);
 
 const authController = require('../controllers/authController');
-const { authenticateUser, authorizeRoles } = require('../middlewares/authMiddleware');
+const { authenticateUser, authorizeRoles } = require('../middleware/authMiddleware.js');
 
 const router = express.Router();
 
-router.post('/register', authenticateUser, authorizeRoles(['Admin']), authController.register);
+router.post('/signup', authenticateUser, authorizeRoles(['Admin']), authController.signup);
 router.post('/login', authController.login);
 router.post('/logout', authenticateUser, authController.logout);
 

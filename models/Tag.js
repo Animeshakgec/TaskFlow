@@ -1,39 +1,51 @@
 'use strict';
-import Tenant from './base/tenant.js';
+import { Model } from 'sequelize';
+
 const Tag = (sequelize, DataTypes) => {
-  class Tag extends Tenant {
+  class Tag extends Model {
     static associate(models) {
-      // define association here
+      // Add polymorphic associations manually if needed
+      // For example:
+      // Tag.belongsTo(models.Task, {
+      //   foreignKey: 'tagForId',
+      //   constraints: false,
+      //   as: 'taggedTask'
+      // });
     }
   }
-  Tag.init({
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    tagForType: {
-      type: DataTypes.STRING,// like [Task,Team,Sprint,project...]
-      allowNull: false,
-    },
-    tagForId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
-    OrganisationId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'Organisations',
-        key: 'id',
+
+  Tag.init(
+    {
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
-      allowNull: false
+      tagForType: {
+        type: DataTypes.STRING, // e.g., 'Task', 'Team', 'Sprint', 'Project'
+        allowNull: false,
+      },
+      tagForId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      organisationId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: 'Organisations',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Tag',
+      paranoid: true,
     }
-  }, {
-    sequelize,
-    paranoid: true,
-    modelName: 'Tag',
-  });
+  );
+
   return Tag;
 };
 
